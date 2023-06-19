@@ -1,0 +1,37 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { useSanityClient, groq } from 'astro-sanity';
+
+async function getAllBlogPosts() {
+	const query = groq`*[_type == "post"]`;
+	const firstPost = await useSanityClient().fetch(query);
+	return firstPost;
+}
+
+const posts = await getAllBlogPosts();
+
+console.log(posts);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header title={SITE_TITLE} />
+		<main>
+			<h1>CZAPOBA</h1>
+			{posts.map((post) => (
+				<div>
+					<h2>{post.title}</h2>
+					<p>{post.content}</p>
+				</div>
+			))}
+		</main>
+		<Footer />
+	</body>
+</html>
