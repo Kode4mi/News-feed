@@ -1,0 +1,25 @@
+---
+import {PortableText} from "astro-portabletext";
+
+export interface Props {
+    post: {
+        title: string;
+        content: string;
+        _createdAt: string;
+    };
+}
+
+const {post} = Astro.props;
+
+const date = new Date(post._createdAt).toLocaleDateString("pl-PL", {hour: '2-digit', minute: '2-digit',  year: 'numeric', month: 'long', day: 'numeric'});
+---
+
+<div class="border-gray-300 sm:mx-32 xl:mx-[30vw] border rounded-md p-6 hover:shadow-xl shadow-md shadow-gray-700 hover:shadow-gray-600 transition cursor-crosshair">
+    <div class="flex flex-row items-center justify-between">
+        <h2 class="text-2xl">{post.title}</h2>
+        <h4>{date}</h4>
+    </div>
+    <p class="mt-6">
+        <PortableText value={post.content} />
+    </p>
+</div>
