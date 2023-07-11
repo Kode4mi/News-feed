@@ -1,0 +1,48 @@
+---
+import {useSanityClient, groq} from 'astro-sanity';
+import Layout from "../../layouts/Layout.astro";
+import Post from "../../components/Post.astro";
+const {slug} = Astro.params;
+export async function getStaticPaths() {
+  async function getAllBlogProjects() {
+    const query = groq`*[_type == "project"] | order(_createdAt desc)`;
+    return await useSanityClient().fetch(query);
+  }
+
+  const query = await getAllBlogProjects();
+
+  const paths = [];
+  query.forEach((project) => {
+    paths.push({
+      params: {
+        slug: project.slug,
+      },
+    });
+  });
+
+  return paths;
+}
+
+const query = await useSanityClient().fetch(groq`*[_type == "project"] | order(_createdAt desc)`);
+
+const project = query.filter((project) => {
+  return project.slug === slug;
+})[0];
+
+async function getAllBlogPosts() {
+  return await useSanityClient().fetch(groq`*[_type == "post" && references("${project._id}")] | order(_createdAt desc)`);
+}
+
+const posts = await getAllBlogPosts();
+
+---
+
+<Layout>
+  <h1 class="uppercase w-full text-4xl text-center my-4">{project.title}</h1>
+  <p class="w-full text-xl text-center mb-8">{project.description}</p>
+  <div class="grid gap-8">
+    {posts.map((post) => (
+      <Post post={post}/>
+    ))}
+  </div>
+</Layout>

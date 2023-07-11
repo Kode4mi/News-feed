@@ -13,6 +13,12 @@ export default {
             type: 'array',
             title: 'Content',
             of: [{type: 'block'}]
+        },
+        {
+            name: 'project',
+            type: 'reference',
+            title: 'Project',
+            to: [{type: 'project'}]
         }
     ]
 }

@@ -3,19 +3,22 @@ import {useSanityClient, groq} from 'astro-sanity';
 import Layout from "../layouts/Layout.astro";
 import Post from "../components/Post.astro";
 
-async function getAllBlogPosts() {
-    const query = groq`*[_type == "post"] | order(_createdAt desc)`;
+async function getAllProjects() {
+    const query = groq`*[_type == "project"] | order(_createdAt desc)`;
     return await useSanityClient().fetch(query);
 }
 
-const posts = await getAllBlogPosts();
+const projects = await getAllProjects();
 ---
 
 <Layout>
-    <h1 class="uppercase w-full text-4xl text-center my-8">Projekt CZAPOBA</h1>
-    <div class="grid gap-8">
-        {posts.map((post) => (
-                <Post post={post}/>
+    <h1 class="text-center text-6xl uppercase my-2">Projekty</h1>
+    <div class="w-full text-center my-8">
+        {projects.map((project) => (
+            <a  href=`/projects/${project.slug}`
+                class="text-3xl hover:text-gray-50">
+                {project.title}
+            </a>
         ))}
     </div>
 </Layout>
