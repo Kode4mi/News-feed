@@ -1,7 +1,7 @@
 ---
 import {useSanityClient, groq} from 'astro-sanity';
 import Layout from "../layouts/Layout.astro";
-import Post from "../components/Post.astro";
+import meme from "../assets/meme.jpg";
 
 async function getAllProjects() {
     const query = groq`*[_type == "project"] | order(_createdAt desc)`;
@@ -12,6 +12,13 @@ const projects = await getAllProjects();
 ---
 
 <Layout>
+    <h1 class="text-center text-6xl uppercase my-2">Blog</h1>
+
+    <div class="w-1/2 m-auto text-center my-8">
+        Witamy👋 na stronie głównej bloga z wiadomościami Kode4mi.
+        Poniżej znajduje się lista projektów nad którymi aktualnie pracujemy.
+    </div>
+
     <h1 class="text-center text-6xl uppercase my-2">Projekty</h1>
     <div class="w-full text-center my-8">
         {projects.map((project) => (
@@ -21,4 +28,8 @@ const projects = await getAllProjects();
             </a>
         ))}
     </div>
+
+    <a href="https://github.com/Kode4mi" target="_blank">
+        <img src={meme} alt="meme" class="m-auto" style="max-width: 60vw" />
+    </a>
 </Layout>
